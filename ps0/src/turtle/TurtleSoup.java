@@ -31,7 +31,7 @@ public class TurtleSoup {
      * @return angle in degrees, where 0 <= angle < 360
      */
     public static double calculateRegularPolygonAngle(int sides) {
-            return 180 - 360.0 / (sides);
+            return 180 - 360.0 / sides;
     }
 
     /**
