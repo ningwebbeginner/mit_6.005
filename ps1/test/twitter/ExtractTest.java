@@ -36,6 +36,30 @@ public class ExtractTest {
         
         assertEquals("expected start", d1, timespan.getStart());
         assertEquals("expected end", d2, timespan.getEnd());
+        
+    }
+    
+    @Test
+    public void testGetTimespan() {
+        // test one element
+        Timespan timespanOneElement = Extract.getTimespan(Arrays.asList(tweet1));
+        assertEquals("expected start", d1, timespanOneElement.getStart());
+        assertEquals("expected end", d1, timespanOneElement.getEnd());
+       
+        // test unsorted elements
+        Instant sampled3 = Instant.parse("2016-02-17T10:30:00Z");
+        Tweet tweet3 = new Tweet(3, "Niiwe", "rn #hype", sampled3);
+        Timespan timespanMoreThan2 = Extract.getTimespan(Arrays.asList(tweet1,tweet2,tweet3));
+        assertEquals("expected start", d1, timespanMoreThan2.getStart());
+        assertEquals("expected end", d2, timespanMoreThan2.getEnd());
+        
+        // test the same time
+        Instant sampled4 = Instant.parse("2016-02-17T10:30:00Z");
+        Tweet tweet4 = new Tweet(4, "Niee", "ohhh #hype", sampled4);
+        Timespan timespanThesameTime = Extract.getTimespan(Arrays.asList(tweet1,tweet2,tweet3,tweet4));
+        assertEquals("expected start", d1, timespanThesameTime.getStart());
+        assertEquals("expected end", d2, timespanThesameTime.getEnd());
+        
     }
     
     @Test
