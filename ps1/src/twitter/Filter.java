@@ -3,6 +3,8 @@
  */
 package twitter;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +29,13 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> findList = new ArrayList<>();
+        for(Tweet tweet:tweets) {
+            if(tweet.getAuthor().toLowerCase().equals(username.toLowerCase())) {
+                findList.add(tweet);
+            }
+        }
+        return findList;
     }
 
     /**
@@ -41,7 +49,18 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> findList = new ArrayList<>();
+        Instant starTime = timespan.getStart();
+        Instant endTime = timespan.getEnd();
+        for(Tweet tweet:tweets) {
+            Instant twtime = tweet.getTimestamp();
+            if(twtime.equals(starTime)
+               || twtime.equals(endTime)
+               || (twtime.isAfter(timespan.getStart()) && twtime.isBefore(timespan.getEnd()))){
+                findList.add(tweet);
+            }
+        }
+        return findList;
     }
 
     /**
@@ -60,7 +79,24 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> findList = new ArrayList<>();
+        for(Tweet tweet:tweets) {
+            String textSplitBySpace = tweet.getText();
+            String textDeleteEnd = textSplitBySpace.substring(0, textSplitBySpace.length()-1);
+            String[] textArray = textDeleteEnd.split(" ");
+            for(String wordInTxt:textArray) {
+                for(String word:words) {
+                    if(wordInTxt.equals(word) && 
+                            !findList.contains(tweet)) {
+                        findList.add(tweet);
+                    } 
+                }
+            }
+
+            
+        }
+        
+        return findList;
     }
 
 }
