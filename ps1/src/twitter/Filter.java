@@ -5,6 +5,7 @@ package twitter;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class Filter {
                 findList.add(tweet);
             }
         }
-        return findList;
+        return Collections.unmodifiableList(findList);
     }
 
     /**
@@ -60,7 +61,7 @@ public class Filter {
                 findList.add(tweet);
             }
         }
-        return findList;
+        return Collections.unmodifiableList(findList);
     }
 
     /**
@@ -95,8 +96,7 @@ public class Filter {
 
             
         }
-        
-        return findList;
+        return Collections.unmodifiableList(findList);
     }
 
 }
