@@ -79,37 +79,37 @@ public class ExtractTest {
         Tweet tweet8 = new Tweet(8, "niewk", "@@xx it?", d1);
         Tweet tweet9 = new Tweet(9, "niewk", "ef@mit.edu it?", d1);
         Tweet tweet10 = new Tweet(10, "niewk", "ef @.mit it?", d1);
-        
+
         // test a mentioned user at begin in upper case
         Set<String> mentionedUsers2 = Extract.getMentionedUsers(Arrays.asList(tweet3));
         assertTrue("expected get a set", mentionedUsers2.stream().anyMatch("xx"::equalsIgnoreCase));
-        
+
         // test a mentioned users at mid
         Set<String> mentionedUsers3 = Extract.getMentionedUsers(Arrays.asList(tweet4));
         assertTrue("expected get a set", mentionedUsers3.stream().anyMatch("xx"::equalsIgnoreCase));
-        
+
         // test a mentioned user at end
         Set<String> mentionedUsers4 = Extract.getMentionedUsers(Arrays.asList(tweet5));
         assertTrue("expected get a set", mentionedUsers4.stream().anyMatch("xx"::equalsIgnoreCase));
-        
+
         // test two mentioned users at begin and at mid
         Set<String> mentionedUsers5 = Extract.getMentionedUsers(Arrays.asList(tweet6));
         assertTrue("expected get a set", mentionedUsers5.stream().anyMatch("xx"::equalsIgnoreCase));
         assertTrue("expected get a set", mentionedUsers5.stream().anyMatch("din"::equalsIgnoreCase));
-        
+
         // test two mentioned users at begin and at end
         Set<String> mentionedUsers6 = Extract.getMentionedUsers(Arrays.asList(tweet7));
         assertTrue("expected get a set", mentionedUsers6.stream().anyMatch("xx"::equalsIgnoreCase));
         assertTrue("expected get a set", mentionedUsers6.stream().anyMatch("xx"::equalsIgnoreCase));
-        
+
         // test an illegal mentioned user followed by @
         Set<String> mentionedUsers7 = Extract.getMentionedUsers(Arrays.asList(tweet8));
         assertTrue("expected get a set", mentionedUsers7.isEmpty());
-        
-        // test an illegal mentioned users e-mail format 
+
+        // test an illegal mentioned users e-mail format
         Set<String> mentionedUsers8 = Extract.getMentionedUsers(Arrays.asList(tweet9));
         assertTrue("expected get a set", mentionedUsers8.isEmpty());
-        
+
         // test an illegal mentioned users followed by .
         Set<String> mentionedUsers9 = Extract.getMentionedUsers(Arrays.asList(tweet10));
         assertTrue("expected get a set", mentionedUsers9.isEmpty());

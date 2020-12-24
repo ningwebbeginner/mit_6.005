@@ -108,17 +108,11 @@ public class SocialNetwork {
                 }
             });
 
-            // put data from sorted list to hashmap
-            HashMap<String, Integer> temp = new HashMap<String, Integer>();
-            for (Map.Entry<String, Integer> one : list) {
-                temp.put(one.getKey(), one.getValue());
-            }
-
-            for (Map.Entry<String, Integer> each : temp.entrySet()) {
+            for (Map.Entry<String, Integer> each : list) {
                 resultString.add(each.getKey());
             }
         }
-        return resultString;
+        return Collections.unmodifiableList(resultString);
     }
 
 }

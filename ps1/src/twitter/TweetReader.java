@@ -31,19 +31,19 @@ import javax.json.JsonValue;
  * DO NOT CHANGE THIS CLASS.
  */
 public class TweetReader {
-    
+
     /**
      * Get a list of tweets from a web server.
      * 
      * @param url URL of server to retrieve tweets from
      * @return a list of tweets retrieved from the server.
-     * @throws IOException if the url is invalid, the server is unreachable,
-     *                     or some other network-related error occurs.
+     * @throws IOException if the url is invalid, the server is unreachable, or some
+     *                     other network-related error occurs.
      */
     public static List<Tweet> readTweetsFromWeb(URL url) throws IOException {
         return readTweets(new InputStreamReader(url.openStream()));
     }
-    
+
     /*
      * Read a list of tweets from a stream.
      * 
@@ -59,11 +59,12 @@ public class TweetReader {
         }
         return tweetList;
     }
-    
+
     /*
      * Crawl recursively through the JSON tree representing a single tweet.
      * 
-     * @return a map that maps key paths (like "id" and "user.screen_name") to values.
+     * @return a map that maps key paths (like "id" and "user.screen_name") to
+     * values.
      */
     private static Map<String, Object> constructTweetMap(JsonValue tree, String key) {
         Map<String, Object> tweetMap = new HashMap<String, Object>();
@@ -101,10 +102,10 @@ public class TweetReader {
         default:
             throw new JsonException("Unexpected value type " + tree.getValueType());
         }
-        
+
         return tweetMap;
     }
-    
+
     /*
      * Construct a Tweet from a map of (key,value) pairs parsed from JSON.
      */
@@ -114,7 +115,7 @@ public class TweetReader {
         String screenName = tweetMap.get("user.screen_name").toString();
         String text = tweetMap.get("text").toString();
         ZonedDateTime timestamp = ZonedDateTime.parse(tweetMap.get("created_at").toString(),
-                                                      DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy", Locale.US));
+                DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy", Locale.US));
         return new Tweet(id, screenName, text, timestamp.toInstant());
     }
 }

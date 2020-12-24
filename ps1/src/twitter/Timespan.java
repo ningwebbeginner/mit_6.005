@@ -16,14 +16,12 @@ public class Timespan {
     private final Instant start;
     private final Instant end;
     /* Rep invariant: start <= end. */
-    
+
     /**
      * Make a Timespan.
      * 
-     * @param start
-     *            starting date/time
-     * @param end
-     *            ending date/time. Requires end >= start.
+     * @param start starting date/time
+     * @param end   ending date/time. Requires end >= start.
      */
     public Timespan(Instant start, Instant end) {
         if (start.isAfter(end)) {
@@ -50,29 +48,29 @@ public class Timespan {
     /*
      * @see Object.toString()
      */
-    @Override public String toString() {
-        return "[" + this.getStart()
-                + "..." + this.getEnd()
-                + "]";
+    @Override
+    public String toString() {
+        return "[" + this.getStart() + "..." + this.getEnd() + "]";
     }
 
     /*
      * @see Object.equals()
      */
-    @Override public boolean equals(Object thatObject) {
+    @Override
+    public boolean equals(Object thatObject) {
         if (!(thatObject instanceof Timespan)) {
             return false;
         }
 
         Timespan that = (Timespan) thatObject;
-        return this.start.equals(that.start) 
-                && this.end.equals(that.end);
+        return this.start.equals(that.start) && this.end.equals(that.end);
     }
 
     /*
      * @see Object.hashCode()
      */
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + start.hashCode();
