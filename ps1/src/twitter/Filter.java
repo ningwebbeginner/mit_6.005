@@ -31,7 +31,7 @@ public class Filter {
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
         List<Tweet> findList = new ArrayList<>();
         for (Tweet tweet : tweets) {
-            if (tweet.getAuthor().toLowerCase().equals(username.toLowerCase())) {
+            if (tweet.getAuthor().equalsIgnoreCase(username)) {
                 findList.add(tweet);
             }
         }
@@ -78,10 +78,8 @@ public class Filter {
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
         List<Tweet> findList = new ArrayList<>();
         for (Tweet tweet : tweets) {
-            String textSplitBySpace = tweet.getText();
-            String textDeleteEnd = textSplitBySpace.substring(0, textSplitBySpace.length() - 1);
-            String[] textArray = textDeleteEnd.split(" ");
-            for (String wordInTxt : textArray) {
+            String[] textSplitBySpace = tweet.getText().split(" ");
+            for (String wordInTxt : textSplitBySpace) {
                 for (String word : words) {
                     if (wordInTxt.equals(word) && !findList.contains(tweet)) {
                         findList.add(tweet);

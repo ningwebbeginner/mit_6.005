@@ -63,9 +63,8 @@ public class SocialNetwork {
             if (!resultMap.containsKey(nameLowecase)) {
                 resultMap.put(nameLowecase, mentionedInOnetweetLowercase);
             } else {
-                for (String stringInResult : resultMap.get(nameLowecase)) {
-                    mentionedInOnetweetLowercase.add(stringInResult);
-                }
+                mentionedInOnetweetLowercase.addAll(resultMap.get(nameLowecase));
+                
                 resultMap.put(nameLowecase, mentionedInOnetweetLowercase);
             }
         }
@@ -84,7 +83,7 @@ public class SocialNetwork {
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
         List<String> resultString = new ArrayList<>();
         HashMap<String, Integer> nameCount = new HashMap<String, Integer>();
-
+        
         
         //store each value to count
         for (Map.Entry<String, Set<String>> entry : followsGraph.entrySet()) {
