@@ -41,6 +41,8 @@ public class ExtractTest {
 
     @Test
     public void testGetTimespan() {
+        
+        // split different case to different functions
         // test one element
         Timespan timespanOneElement = Extract.getTimespan(Arrays.asList(tweet1));
         assertEquals("expected start", d1, timespanOneElement.getStart());
