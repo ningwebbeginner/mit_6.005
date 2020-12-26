@@ -62,15 +62,15 @@ public class SocialNetworkTest {
         Map<String, Set<String>> followsGraph1Lowercase = transformLowerCase(followsGraph1);
         Set<String> keySet1 = followsGraph1Lowercase.keySet();
         assertTrue("expected graph contain", keySet1.contains(tweet2.getAuthor()));
-        assertTrue("expected graph contain", !keySet1.contains("fi") || followsGraph1Lowercase.get("fi").isEmpty());
+        assertTrue("expected graph not contain or an empty set", !keySet1.contains("fi") || followsGraph1Lowercase.get("fi").isEmpty());
 
         // one user tweet one txt @ another two
         Map<String, Set<String>> followsGraph2 = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet2, tweet3));
         Map<String, Set<String>> followsGraph2Lowercase = transformLowerCase(followsGraph2);
         Set<String> keySet2 = followsGraph2Lowercase.keySet();
         assertTrue("expected graph contain", keySet2.contains(tweet3.getAuthor()));
-        assertTrue("expected graph contain", !keySet2.contains("fi") || followsGraph1Lowercase.get("fi").isEmpty());
-        assertTrue("expected graph contain", !keySet2.contains("if") || followsGraph1Lowercase.get("if").isEmpty());
+        assertTrue("expected graph not contain or an empty set", !keySet2.contains("fi") || followsGraph1Lowercase.get("fi").isEmpty());
+        assertTrue("expected graph not contain or an empty set", !keySet2.contains("if") || followsGraph1Lowercase.get("if").isEmpty());
 
         // two users tweet two txts @ another two and oneself
         Map<String, Set<String>> followsGraph3 = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet2, tweet5));
@@ -78,15 +78,15 @@ public class SocialNetworkTest {
         Set<String> keySet3 = followsGraph3Lowercase.keySet();
         assertFalse("expected graph don't containhimeself",
                 followsGraph3Lowercase.get(tweet5.getAuthor()).contains(tweet5.getAuthor()));
-        assertTrue("expected graph contain", !keySet3.contains("fi") || followsGraph3Lowercase.get("fi").isEmpty());
-        assertTrue("expected graph contain", !keySet3.contains("san") || followsGraph3Lowercase.get("san").isEmpty());
+        assertTrue("expected graph not contain or an empty set", !keySet3.contains("fi") || followsGraph3Lowercase.get("fi").isEmpty());
+        assertTrue("expected graph not contain or an empty set", !keySet3.contains("san") || followsGraph3Lowercase.get("san").isEmpty());
 
         // two users tweet two txts @ two
         Map<String, Set<String>> followsGraph4 = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet2, tweet6));
         Map<String, Set<String>> followsGraph4Lowercase = transformLowerCase(followsGraph4);
         Set<String> keySet4 = followsGraph4Lowercase.keySet();
-        assertTrue("expected graph", keySet4.contains(tweet6.getAuthor()));
-        assertTrue("expected graph", followsGraph4Lowercase.get(tweet6.getAuthor()).contains(tweet2.getAuthor()));
+        assertTrue("expected graph contain", keySet4.contains(tweet6.getAuthor()));
+        assertTrue("expected graph contain", followsGraph4Lowercase.get(tweet6.getAuthor()).contains(tweet2.getAuthor()));
 
     }
 
@@ -115,7 +115,7 @@ public class SocialNetworkTest {
         List<String> influencers = SocialNetwork.influencers(followsGraphLowercase);
 
         assertEquals("expected a list with two", 2, influencers.size());
-        assertTrue("expected a list with two", influencers.containsAll(Arrays.asList("bbitdiddle", "om")));
+        assertTrue("expected a list contain", influencers.containsAll(Arrays.asList("bbitdiddle", "om")));
 
         // empty list
         Map<String, Set<String>> followsGraph1 = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet2));

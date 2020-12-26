@@ -119,8 +119,8 @@ public class FilterTest {
         List<Tweet> inTimespan1 = Filter.inTimespan(Arrays.asList(tweet3, tweet4, tweet6),
                 new Timespan(testStart, testEnd));
 
-        assertFalse("expected empty list", inTimespan1.isEmpty());
-        assertTrue("expected list to contain tweets", inTimespan1.contains(tweet6));
+        assertFalse("expected no empty list", inTimespan1.isEmpty());
+        assertTrue("expected list to contain a tweet", inTimespan1.contains(tweet6));
         assertEquals("expected same order", 0, inTimespan1.indexOf(tweet6));
 
         // one at mid
@@ -129,7 +129,7 @@ public class FilterTest {
         List<Tweet> inTimespan2 = Filter.inTimespan(Arrays.asList(tweet3, tweet6, tweet7),
                 new Timespan(testStart, testEnd));
 
-        assertFalse("expected empty list", inTimespan2.isEmpty());
+        assertFalse("expected no empty list", inTimespan2.isEmpty());
         assertTrue("expected list to contain tweets", inTimespan2.containsAll(Arrays.asList(tweet6)));
         assertEquals("expected same order", 0, inTimespan2.indexOf(tweet6));
 
@@ -153,7 +153,7 @@ public class FilterTest {
         List<Tweet> containingTwoTimes = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3),
                 Arrays.asList("talk"));
 
-        assertEquals("expected same order", 3, containingTwoTimes.size());
+        assertEquals("expected a 3 list", 3, containingTwoTimes.size());
         assertTrue("expected list to contain tweets",
                 containingTwoTimes.containsAll(Arrays.asList(tweet1, tweet2, tweet3)));
         assertEquals("expected same order", 0, containingTwoTimes.indexOf(tweet1));
@@ -163,14 +163,14 @@ public class FilterTest {
         // test word the end of string
         List<Tweet> containingEndOfString = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3),
                 Arrays.asList("much"));
-        assertEquals("expected same order", 2, containingEndOfString.size());
+        assertEquals("expected a 2 list", 2, containingEndOfString.size());
         assertTrue("expected list to contain tweets", containingEndOfString.containsAll(Arrays.asList(tweet1, tweet3)));
         assertEquals("expected same order", 0, containingEndOfString.indexOf(tweet1));
 
         // test two words
         List<Tweet> containingTwoWord = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3),
                 Arrays.asList("talk", "much"));
-        assertEquals("expected same order", 3, containingTwoWord.size());
+        assertEquals("expected a 3 list", 3, containingTwoWord.size());
         assertTrue("expected list to contain tweets",
                 containingTwoTimes.containsAll(Arrays.asList(tweet1, tweet2, tweet3)));
         assertEquals("expected same order", 0, containingTwoWord.indexOf(tweet1));

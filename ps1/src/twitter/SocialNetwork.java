@@ -45,30 +45,28 @@ public class SocialNetwork {
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
         Map<String, Set<String>> resultMap = new HashMap<>();
-        if (!tweets.isEmpty()) {
-            for (Tweet tweet : tweets) {
-                List<Tweet> onetweetList = new ArrayList<>();
-                onetweetList.add(tweet);
-                Set<String> mentionedInOnetweet = Extract.getMentionedUsers(onetweetList);
-                Set<String> mentionedInOnetweetLowercase = new HashSet<>();
 
-                for (String author : mentionedInOnetweet) {
-                    mentionedInOnetweetLowercase.add(author.toLowerCase());
+        for (Tweet tweet : tweets) {
+            List<Tweet> onetweetList = new ArrayList<>();
+            onetweetList.add(tweet);
+            Set<String> mentionedInOnetweet = Extract.getMentionedUsers(onetweetList);
+            Set<String> mentionedInOnetweetLowercase = new HashSet<>();
+
+            for (String author : mentionedInOnetweet) {
+                mentionedInOnetweetLowercase.add(author.toLowerCase());
+            }
+
+            String nameLowecase = tweet.getAuthor().toLowerCase();
+
+            mentionedInOnetweetLowercase.remove(tweet.getAuthor());
+
+            if (!resultMap.containsKey(nameLowecase)) {
+                resultMap.put(nameLowecase, mentionedInOnetweetLowercase);
+            } else {
+                for (String stringInResult : resultMap.get(nameLowecase)) {
+                    mentionedInOnetweetLowercase.add(stringInResult);
                 }
-
-                String nameLowecase = tweet.getAuthor().toLowerCase();
-
-                mentionedInOnetweetLowercase.remove(tweet.getAuthor());
-
-                if (!resultMap.containsKey(nameLowecase)) {
-                    resultMap.put(nameLowecase, mentionedInOnetweetLowercase);
-                } else {
-                    for (String stringInResult : resultMap.get(nameLowecase)) {
-                        mentionedInOnetweetLowercase.add(stringInResult);
-                    }
-                    resultMap.put(nameLowecase, mentionedInOnetweetLowercase);
-                }
-
+                resultMap.put(nameLowecase, mentionedInOnetweetLowercase);
             }
         }
 
@@ -85,33 +83,35 @@ public class SocialNetwork {
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
         List<String> resultString = new ArrayList<>();
-        if (followsGraph.size() > 0) {
-            HashMap<String, Integer> nameCount = new HashMap<String, Integer>();
+        HashMap<String, Integer> nameCount = new HashMap<String, Integer>();
 
-            for (Map.Entry<String, Set<String>> entry : followsGraph.entrySet()) {
-                for (String eachFollowed : entry.getValue()) {
-                    if (nameCount.containsKey(eachFollowed)) {
-                        nameCount.put(eachFollowed, nameCount.get(eachFollowed) + 1);
-                    } else {
-                        nameCount.put(eachFollowed, 1);
-                    }
+        
+        //store each value to count
+        for (Map.Entry<String, Set<String>> entry : followsGraph.entrySet()) {
+            for (String eachFollowed : entry.getValue()) {
+                String followedLowered = eachFollowed.toLowerCase();
+                if (nameCount.containsKey(followedLowered)) {
+                    nameCount.put(followedLowered, nameCount.get(followedLowered) + 1);
+                } else {
+                    nameCount.put(followedLowered, 1);
                 }
-            }
-
-            // Create a list from elements of HashMap
-            List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(nameCount.entrySet());
-
-            // Sort the list
-            Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-                public int compare(Map.Entry<String, Integer> oneNumber, Map.Entry<String, Integer> twoNumber) {
-                    return (twoNumber.getValue()).compareTo(oneNumber.getValue());
-                }
-            });
-
-            for (Map.Entry<String, Integer> each : list) {
-                resultString.add(each.getKey());
             }
         }
+
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(nameCount.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> oneNumber, Map.Entry<String, Integer> twoNumber) {
+                return (twoNumber.getValue()).compareTo(oneNumber.getValue());
+            }
+        });
+
+        for (Map.Entry<String, Integer> each : list) {
+            resultString.add(each.getKey());
+        }
+
         return Collections.unmodifiableList(resultString);
     }
 
