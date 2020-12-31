@@ -5,6 +5,9 @@ package graph;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.Test;
 
 /**
@@ -41,5 +44,51 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
     //   TODO
     
     // TODO tests for operations of Vertex
+    @Test
+    public void testInitialVertexnoEdge() {
+        Vertex vertxTest = new Vertex("A");
+        vertxTest.setTarget("B", 0);
+        assertEquals("expected new vertex to have no edge",
+                0, vertxTest.targetsMap().size());
+    }
+    
+    // TODO other tests for instance methods of Graph
+    @Test
+    public void testInitialVerticesAddRemove() {
+        Vertex vertxTest = new Vertex("A");
+        vertxTest.setTarget("B", 1);
+        assertEquals("expected new vertex toString",
+                "A:\n---1---> B\n", vertxTest.toString());
+        vertxTest.setTarget("B", 0);
+        assertEquals("expected new graph to have no edge",
+                0, vertxTest.targetsMap().size());
+    }
+    
+    @Test
+    public void testInitialVerticesAddSameRemove() {
+        Vertex vertxTest = new Vertex("A");
+        vertxTest.setTarget("B", 1);
+        vertxTest.setTarget("B", 2);
+        assertEquals("expected new vertex toString",
+                "A:\n---2---> B\n", vertxTest.toString());
+    }
+    
+    
+    @Test
+    public void testInitialVerticesAddThree() {       
+        Vertex vertxTest = new Vertex("A");
+        vertxTest.setTarget("B", 1);
+        vertxTest.setTarget("C", 2);
+        assertTrue("expected new vertex to have two targets",
+                vertxTest.targetsMap().keySet().containsAll(Arrays.asList("B","C")));
+        assertEquals("expected new vertex have size of target B ",
+                1 , (int) vertxTest.targetsMap().get("B"));
+        assertEquals("expected new vertex have size of target B ",
+                2 , (int) vertxTest.targetsMap().get("C"));
+    }
+    
+  
+    
+ 
     
 }

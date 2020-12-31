@@ -5,6 +5,7 @@ package graph;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.Test;
@@ -100,7 +101,7 @@ public abstract class GraphInstanceTest {
         assertEquals("expected new graph to have no vertices",
                 0, test4.sources("bb").size());
         assertEquals("expected new graph to have no vertices",
-                1, (int) test4.targets("aa").get("bb"));
+                1, (int) test4.sources("aa").get("bb"));
         emptyInstance().remove("bb");
         assertEquals("expected new graph to have no vertices",
                 0, test4.targets("aa").size());
@@ -113,11 +114,11 @@ public abstract class GraphInstanceTest {
         test5.set("bb", "aa", 2);
         test5.set("bb", "cc", 1);
         assertEquals("expected new graph to have 2 targets",
-                2, test5.sources("bb").size());
+                2, test5.targets("bb").size());
         assertEquals("expected new graph to have 2 targets",
-                2, (int) test5.sources("bb").get("aa"));
+                2, (int) test5.targets("bb").get("aa"));
         assertEquals("expected new graph to have 2 targets",
-                1, (int) test5.sources("bb").get("cc"));
+                1, (int) test5.targets("bb").get("cc"));
         
     }
     
@@ -147,6 +148,46 @@ public abstract class GraphInstanceTest {
                         0, test7.targets("aa").size());
     }
     
+    // Testing strategy for GraphInstanceTest.toString()
+    //      edges: 0, n
+    //      vertices: 0, n
     
+    // tests for ConcreteEdgesGraph.toString()
+    @Test
+    public void testInitialVerticesEmptytoString() {
+        Graph<String> test1 =  emptyInstance();
+        assertEquals("expected new graph to have no vertex",
+                 0,test1.toString().length());
+    }
+    
+    @Test
+    public void testInitialMultiVerticesNoEdge() {
+        Graph<String> test2 =  emptyInstance();
+        test2.add("aa");
+        test2.add("bb");
+        String[] stringSplitted = test2.toString().split("\n");
+        assertTrue("expected new graph to have vertives",
+                Arrays.asList(stringSplitted)
+                .containsAll(Arrays.asList("aa","bb")));
+    }
+    
+    @Test
+    public void testInitialMultipleVerticesMultipleEdge() {
+        Graph<String> test3 =  emptyInstance();
+        test3.set("aa", "bb", 2);
+        test3.set("bb", "aa", 1);
+        test3.set("bb", "cc", 1);
+        test3.add("dd");
+        String[] stringSplitted = test3.toString().split("\n");
+        assertTrue("expected new graph to have vertives",
+                Arrays.asList(stringSplitted)
+                .containsAll(Arrays.asList("aa"
+                        ,"bb"
+                        ,"cc"
+                        ,"dd"
+                        ,"aa ---2---> bb"
+                        ,"bb ---1---> aa"
+                        ,"bb ---1---> cc")));
+    }
     
 }

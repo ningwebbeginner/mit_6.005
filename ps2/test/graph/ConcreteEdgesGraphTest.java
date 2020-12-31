@@ -5,6 +5,7 @@ package graph;
 
 import static org.junit.Assert.*;
 
+
 import org.junit.Test;
 
 /**
@@ -29,17 +30,51 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
      */
     
     // Testing strategy for ConcreteEdgesGraph.toString()
-    //   TODO
+    //      edges: 0, n
+    //      vertices: 0, n
     
-    // TODO tests for ConcreteEdgesGraph.toString()
-    
+    // tests for ConcreteEdgesGraph.toString()
+   
+  
     /*
      * Testing Edge...
      */
     
     // Testing strategy for Edge
-    //   TODO
+    //getSource():
+    //      get source
+    //getTarget():
+    //      get target
+    //getWeight():
+    //      get weight
+    //toString():
+    //      get matched string
     
-    // TODO tests for operations of Edge
+    @Test
+    public void testInitialEdgeEmptyEdge() {
+        Edge edgeTest = new Edge("A", "B", 1 ); 
+        assertEquals("expected new edge toString",
+                "A ---1---> B", edgeTest.toString());
+    }
     
+    @Test
+    public void testInitialEdgeGetsource() {
+        Edge edgeTest = new Edge("A", "B", 1 ); 
+        assertEquals("expected new edge source",
+                "A", edgeTest.getSource());
+    }
+    
+    @Test
+    public void testInitialEdgeGettarget() {
+        Edge edgeTest = new Edge("A", "B", 1 ); 
+        assertEquals("expected new edge target",
+                "B", edgeTest.getTarget());
+    }
+    
+    @Test
+    public void testInitialEdgeGetweight() {
+        Edge edgeTest = new Edge("A", "B", 1 ); 
+        assertEquals("expected new edge weight",
+                1, edgeTest.getWeight());
+    }
 }
