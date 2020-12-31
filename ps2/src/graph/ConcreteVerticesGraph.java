@@ -127,25 +127,23 @@ public class ConcreteVerticesGraph implements Graph<String> {
     @Override
     public Map<String, Integer> sources(String target) {
         checkRep();
-        Map<String, Integer> sourceMap = new HashMap<>();
         for(Vertex vertex:vertices) {
             if(vertex.getLabel().equals(target)) {
                 return vertex.sourcesMap();
             }
         }
-        return sourceMap;
+        return new HashMap<>();
     }
 
     @Override
     public Map<String, Integer> targets(String source) {
         checkRep();
-        Map<String, Integer> targetMap = new HashMap<>();
         for(Vertex vertex:vertices) {
             if(vertex.getLabel().equals(source)) {
                 return vertex.targetsMap();
             }
         }
-        return targetMap;
+        return new HashMap<>();
     }
 
     // TODO toString()
