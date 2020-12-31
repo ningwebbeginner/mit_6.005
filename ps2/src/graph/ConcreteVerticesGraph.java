@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,46 +44,123 @@ public class ConcreteVerticesGraph implements Graph<String> {
     private void checkRep() {
         List<String> vertexName = new ArrayList<>();
         for (Vertex vertex : vertices) {
-            assert !vertexName.contains(vertex.getSource());
-            vertexName.add(vertex.getSource());
+            assert !vertexName.contains(vertex.getLabel());
+            vertexName.add(vertex.getLabel());
         }
-        for (Vertex vertex : vertices) {
-            assert vertexName.containsAll(vertex.targetsMap().keySet());
+        for (Vertex vertexi : vertices) {
+            for(Vertex vertexj : vertices) {
+                if(!vertexi.getLabel().equals(vertexj.getLabel())) {
+                    for (Map.Entry<String, Integer> entry : vertexi.targetsMap().entrySet()) {
+                        if(vertexj.sourcesMap().entrySet().contains(entry.getKey())) {
+                            assert (int) vertexj.sourcesMap().get(entry.getKey()) 
+                                        == (int)entry.getValue();
+                        }
+                    }
+                }
+            }
         }
+        
 
     }
 
     @Override
     public boolean add(String vertex) {
-        throw new RuntimeException("not implemented");
+        boolean include = false;
+        for(Vertex eachVertex: vertices) {
+            if(eachVertex.getLabel().equals(vertex)) {
+                include = true;
+            }
+        }
+        if(!include) {
+            vertices.add(new Vertex(vertex));
+        }
+        checkRep();
+        return include;
     }
 
     @Override
     public int set(String source, String target, int weight) {
-        throw new RuntimeException("not implemented");
+        int previouWeight = 0;
+        this.add(source);
+        this.add(target);
+        for(Vertex eachVertex: vertices) {
+            if(eachVertex.getLabel().equals(source)) {
+                previouWeight = eachVertex.setTarget(target, weight);
+            }
+            if(eachVertex.getLabel().equals(target)) {
+                previouWeight = eachVertex.setSource(source, weight);
+            }      
+        }
+        
+        checkRep();
+        return previouWeight;
     }
 
     @Override
     public boolean remove(String vertex) {
-        throw new RuntimeException("not implemented");
+        boolean include = false;
+        Iterator<Vertex> vertexIterator = vertices.iterator();
+        while (vertexIterator.hasNext()) {
+            Vertex vertexNext = vertexIterator.next();
+            if(vertexNext.getLabel().equals(vertex)) {
+                vertexIterator.remove();
+                include = true;
+                }
+            else {
+                include = include || vertexNext.setSource(vertex, 0) != 0;
+                include = include || vertexNext.setTarget(vertex, 0) != 0;
+            }
+        }
+        return include;
     }
 
     @Override
     public Set<String> vertices() {
-        throw new RuntimeException("not implemented");
+        Set<String> labelSet = new HashSet<>();
+        for(Vertex vertex : vertices) {
+            labelSet.add(vertex.getLabel());
+        }
+        
+        return labelSet;
     }
 
     @Override
     public Map<String, Integer> sources(String target) {
-        throw new RuntimeException("not implemented");
+        checkRep();
+        Map<String, Integer> sourceMap = new HashMap<>();
+        for(Vertex vertex:vertices) {
+            if(vertex.getLabel().equals(target)) {
+                return vertex.sourcesMap();
+            }
+        }
+        return sourceMap;
     }
 
     @Override
     public Map<String, Integer> targets(String source) {
-        throw new RuntimeException("not implemented");
+        checkRep();
+        Map<String, Integer> targetMap = new HashMap<>();
+        for(Vertex vertex:vertices) {
+            if(vertex.getLabel().equals(source)) {
+                return vertex.targetsMap();
+            }
+        }
+        return targetMap;
     }
 
     // TODO toString()
+    @Override
+    public String toString() {
+        checkRep();
+        String result = "";
+        for(Vertex vertex: vertices) {
+               result += vertex.getLabel() + "\n";
+               for (Map.Entry<String, Integer> entry : vertex.targetsMap().entrySet()) {
+                   result += vertex.getLabel() + " ---" + entry.getValue() + "---> " + entry.getKey() + "\n";
+               }
+        }
+        return result;
+    }
 
 }
 
@@ -95,7 +174,8 @@ public class ConcreteVerticesGraph implements Graph<String> {
  */
 class Vertex {
 
-    private String source;
+    private String vertex;
+    private Map<String, Integer> sources;
     private Map<String, Integer> targets;
 
     // Abstraction function:
@@ -111,7 +191,8 @@ class Vertex {
      * @param source value
      */
     public Vertex(String source) {
-        this.source = source;
+        this.vertex = source;
+        sources = new HashMap<>();
         targets = new HashMap<>();
         checkRep();
     }
@@ -120,8 +201,11 @@ class Vertex {
     // *** Warning: this does nothing unless you turn on assertion checking
     // by passing -enableassertions to Java
     private void checkRep() {
-        assert !targets.containsKey(source);
+        assert !targets.containsKey(vertex);
         for (Map.Entry<String, Integer> entry : targets.entrySet()) {
+            assert entry.getValue() > 0;
+        }
+        for (Map.Entry<String, Integer> entry : sources.entrySet()) {
             assert entry.getValue() > 0;
         }
     }
@@ -130,9 +214,9 @@ class Vertex {
     /**
      * @return source value
      */
-    public String getSource() {
+    public String getLabel() {
         checkRep();
-        return source;
+        return vertex;
     }
 
     /**
@@ -144,17 +228,45 @@ class Vertex {
      * @param weight nonnegative weight of the edge
      * @return the previous weight of the edge, or zero if there was no such edge
      */
-    public Integer setTarget(String target, Integer weighted) {
-        checkRep();
+    public int setTarget(String target, Integer weighted) {
         Integer setTargetflag = 0;
-        if (weighted > 0) {
-            setTargetflag = weighted;
-            targets.put(target, weighted);
-        } else if (weighted == 0) {
-
+        if (weighted != 0) {
+            setTargetflag = targets.put(target, weighted);
+        } else {
+            setTargetflag = targets.remove(target); 
         }
+        setTargetflag = setTargetflag != null ? setTargetflag : 0;  
 
+        checkRep();
         return setTargetflag;
+    }
+    
+    /**
+     * Add, change, or remove a weighted directed edge in this graph.
+     * If weight is nonzero, add an edge or update the weight of that edge;
+     * vertices with the given labels are added to the graph if they do not
+     * already exist.
+     * If weight is zero, remove the edge if it exists (the graph is not
+     * otherwise modified).
+     * 
+     * @param source label of the source vertex
+     * @param target label of the target vertex
+     * @param weight nonnegative weight of the edge
+     * @return the previous weight of the edge, or zero if there was no such
+     *         edge
+     */
+    public int setSource(String source, Integer weighted) {
+        
+        Integer setSourceflag = 0;
+        if (weighted != 0) {
+            setSourceflag = sources.put(source, weighted);
+        } else {
+            setSourceflag = sources.remove(source); 
+        }
+        setSourceflag = setSourceflag != null ? setSourceflag : 0;  
+
+        checkRep();
+        return setSourceflag;
     }
 
     /**
@@ -171,12 +283,30 @@ class Vertex {
         checkRep();
         return new HashMap<String, Integer>(targets);
     };
+    
+    /**
+     * Get the target vertices with directed edges from a source vertex and the
+     * weights of those edges.
+     * 
+     * @param target a label
+     * @return a map where the key set is the set of labels of vertices such that
+     *         this graph includes an edge from source to that vertex, and the value
+     *         for each key is the (nonzero) weight of the edge from source to the
+     *         key
+     */
+    public Map<String, Integer> sourcesMap() {
+        checkRep();
+        return new HashMap<String, Integer>(sources);
+    };
 
     @Override
     public String toString() {
         checkRep();
-        String result = source + "\n";
+        String result = vertex + "\n";
         for (Map.Entry<String, Integer> entry : targets.entrySet()) {
+            result += "---" + entry.getValue() + "---> " + entry.getKey() + "\n";
+        }
+        for (Map.Entry<String, Integer> entry : sources.entrySet()) {
             result += "---" + entry.getValue() + "---> " + entry.getKey() + "\n";
         }
         return result;

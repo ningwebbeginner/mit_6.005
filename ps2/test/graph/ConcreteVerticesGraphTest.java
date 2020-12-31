@@ -58,7 +58,7 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
         Vertex vertxTest = new Vertex("A");
         vertxTest.setTarget("B", 1);
         assertEquals("expected new vertex toString",
-                "A:\n---1---> B\n", vertxTest.toString());
+                "A\n---1---> B\n", vertxTest.toString());
         vertxTest.setTarget("B", 0);
         assertEquals("expected new graph to have no edge",
                 0, vertxTest.targetsMap().size());
@@ -70,7 +70,7 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
         vertxTest.setTarget("B", 1);
         vertxTest.setTarget("B", 2);
         assertEquals("expected new vertex toString",
-                "A:\n---2---> B\n", vertxTest.toString());
+                "A\n---2---> B\n", vertxTest.toString());
     }
     
     
